@@ -1,3 +1,78 @@
-<p>
-  view-img works!
-</p>
+<app-header> </app-header>
+<div class="container-fluid">
+  <span>X-Axis: {{ this.Xoffset }} - Y-Axis: {{ this.Yoffset }}</span>
+  <div class="row justify-content-center">
+    <div class="row">
+      <div class="canvasHolder col-7 justify-content-center">
+        <div
+          #redCircle
+          *ngFor="let circles of count"
+          class="redCircle"
+          cdkDragBoundary=".canvasHolder"
+          cdkDrag
+          (click)="showBasicDialog()"
+        ></div>
+        <canvas #canvas class="canvas mx-n3"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-around mb-3">
+    <div class="col-7">
+      <button type="button" class="btn btn-blue my-3" (click)="createCircle()">
+        Add Pointer
+      </button>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  header="Add Name and Location"
+  [(visible)]="displayBasic"
+  [style]="{ width: '30vw' }"
+  [baseZIndex]="10000"
+>
+  <form name="form" #imgForm="ngForm" novalidate>
+    <div class="form-group">
+      <label for="customerName">Customer Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="custName"
+        [(ngModel)]="model.customerName"
+        #custName="ngModel"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="customerLocation">Customer Location</label>
+      <input
+        type="text"
+        class="form-control"
+        name="customerLoc"
+        [(ngModel)]="model.customerLocation"
+        #customerLoc="ngModel"
+        required
+      />
+    </div>
+  </form>
+
+  <p-footer>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      (click)="AddData(); imgForm.reset()"
+      label="Add"
+      [disabled]="!imgForm.valid"
+    ></button>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      (click)="displayBasic = false"
+      label="Cancel"
+      class="ui-button-secondary"
+    ></button>
+  </p-footer>
+</p-dialog>
+<app-footer></app-footer>

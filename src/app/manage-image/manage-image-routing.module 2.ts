@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-
+import { Routes, RouterModule } from '@angular/router';
 import { AddImgComponent } from './add-img/add-img.component';
 import { ViewImgComponent } from './view-img/view-img.component';
 
 const routes: Routes = [
-  { path: 'add', component: AddImgComponent },
-  { path: 'view/:name', component: ViewImgComponent }
+  { path: 'view', component: AddImgComponent },
+  { path: 'view/:id', component: ViewImgComponent }
 ];
 
 @NgModule({

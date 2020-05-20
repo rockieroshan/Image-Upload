@@ -20,19 +20,24 @@
 
 // img
 //   width: 80%
-.container-fluid
-  .custom-file-upload
-    border: 1px solid #ccc
-    display: inline-block
-    padding: 6px 12px
-    cursor: pointer
-    background: olivedrab
-    color: white
+.container-fluid {
+  .custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background: #007ad9;
+    color: white;
+  }
 
-  .img-icon
-    img
-      height: 30px
-      width: 40px
-      cursor: pointer
-input[type="file"]
-      display: none
+  .img-icon {
+    img {
+      height: 30px;
+      width: 40px;
+      cursor: pointer;
+    }
+  }
+}
+input[type='file'] {
+  display: none;
+}

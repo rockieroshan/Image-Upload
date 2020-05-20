@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { LoginModel } from '../../model/login-model';
 import { NotificationService } from '../../shared/notification/notification.service';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { AuthgardService } from '../authgard.service';
+
 // {
 //   "email": "eve.holt@reqres.in",
 //   "password": "cityslicka"
@@ -11,7 +14,7 @@ import { AuthgardService } from '../authgard.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.sass']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
   showeye: boolean;
@@ -34,6 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.showeye = false;
     this.userEmail = '';
     this.isLoginError = true;
+    this.auth.Logout();
   }
   loginUser({ email, password }): void {
     this.loading = true;
@@ -44,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.unSubscribelogIn = this.auth.logIn(payload).subscribe(
       res => {
         localStorage.setItem('userToken', res.token);
-        this.router.navigate(['/shop/view']);
+        this.router.navigate(['/image/add']);
         this.msg.addMessageToNotification(
           'success',
           'Success',

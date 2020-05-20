@@ -1,0 +1,26 @@
+.container-fluid {
+  .canvasHolder {
+    width: 800px;
+    height: 600px;
+    max-width: 100%;
+    border: dotted #ccc 2px;
+  }
+  .canvas {
+    display: block;
+    width: 800px;
+    height: 600px;
+  }
+  .redCircle {
+    height: 15px;
+    width: 15px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 8%;
+    right: 6%;
+    cursor: move;
+  }
+}
+
+// img
+//   width: 80%
