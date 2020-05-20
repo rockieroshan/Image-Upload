@@ -1,1 +1,173 @@
-/* You can add global styles to this file, and also import other style files */
+//variable
+
+$white: #ffffff;
+$blue: #19659d;
+$red: #de435b;
+$gray: #7b858c;
+$black: #404040;
+$lGray: #c3c5c8;
+$lblue: #4a90e2;
+
+// global styles
+
+html {
+  font-family: 'Helvetica Neue', sans-serif;
+}
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-size: 13px;
+}
+input
+  font-size: 15px
+  padding-left: 10px
+.required:after
+  content: ' *'
+  color: $red
+
+.btn {
+  font-size: 15px;
+}
+.sm-font {
+  font-size: 13px;
+}
+.md-font {
+  font-size: 15px;
+}
+.lg-font {
+  font-size: 17px;
+}
+.xl-font {
+  font-size: 23px;
+}
+.ui-dialog-content {
+  .pi-exclamation-triangle {
+    display: none;
+  }
+}
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon {
+  display: none;
+}
+.ui-dialog-titlebar {
+  background-color: $white !important;
+}
+.ui-dialog .ui-dialog-content {
+  border: none !important;
+}
+.ui-table .ui-sortable-column.ui-state-highlight {
+  background-color: #f4f4f4 !important;
+  color: $black !important;
+}
+.ui-table .ui-sortable-column .ui-sortable-column-icon {
+  color: #848484 !important;
+}
+
+.btn-blue {
+  color: $white;
+  border-radius: 3px;
+  border-color: $blue;
+  font-weight: 500;
+  background-color: $blue;
+  margin-right: 10px;
+  padding: 6px 20px;
+}
+.btn-cancel {
+  background-color: $white;
+  color: $black;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid $gray;
+  &:hover {
+    color: $white;
+    background-color: $black;
+  }
+}
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+  font-size: 18px;
+}
+.ui-confirmdialog-message {
+  font-weight: 600;
+}
+.btn-confirm {
+  cursor: pointer;
+  background-color: $red;
+  color: $white;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid $red;
+}
+.disabled {
+  color: $gray;
+  cursor: default;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* PrimeNG toast css customization*/
+.ui-toast-message {
+  background-color: #ffffff !important;
+  border: 1px solid $lGray !important;
+  border-radius: 10px;
+  min-height: 90px;
+}
+
+.ui-toast-message-success {
+  border-left: 10px solid $blue !important;
+  .ui-toast-icon {
+    display: none !important;
+  }
+  .ui-toast-summary {
+    color: $blue;
+    font-size: 17px !important;
+  }
+}
+
+.ui-overlaypanel {
+  z-index: 1011 !important;
+}
+
+.ui-toast-message-error {
+  border-left: 10px solid $red !important;
+  .ui-toast-icon {
+    display: none !important;
+  }
+  .ui-toast-summary {
+    color: $red;
+    font-size: 17px !important;
+  }
+}
+
+.ui-toast-message-info {
+  border-left: 10px solid $lblue !important;
+  .ui-toast-summary {
+    color: $lblue;
+    font-size: 17px !important;
+    padding-left: 30px !important;
+  }
+}
+.ui-toast-message-text-content {
+  margin-left: 0px !important;
+}
+.ui-toast-message.ui-toast-message-warn {
+  width: 400px !important;
+  padding: 15px 0px !important;
+  h3 {
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+  .btn {
+    color: $white !important;
+    padding: 5px 25px !important;
+    margin-top: 10px !important;
+  }
+  .btn-approve {
+    background-color: $blue !important;
+  }
+  .btn-cancel {
+    background-color: $red !important;
+    margin-left: 10px !important;
+  }
+}

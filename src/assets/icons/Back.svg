@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="15px" viewBox="0 0 16 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Sort/Down</title>
+    <desc>Created with Sketch.</desc>
+    <g id="RFI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="02-Forgot-Password" transform="translate(-512.000000, -333.000000)">
+            <g id="Forgot-Paswword" transform="translate(470.000000, 291.000000)">
+                <g id="Sort/Down" transform="translate(49.500000, 49.500000) rotate(90.000000) translate(-49.500000, -49.500000) translate(38.000000, 38.000000)">
+                    <g id="round-arrow_downward-24px">
+                        <polygon id="Path" points="0 0 23 0 23 23 0 23"></polygon>
+                        <path d="M10.5416667,4.79166667 L10.5416667,15.49625 L5.865,10.8195833 C5.49125,10.4458333 4.87791667,10.4458333 4.50416667,10.8195833 C4.13041667,11.1933333 4.13041667,11.7970833 4.50416667,12.1708333 L10.8195833,18.48625 C11.1933333,18.86 11.7970833,18.86 12.1708333,18.48625 L18.48625,12.1708333 C18.86,11.7970833 18.86,11.1933333 18.48625,10.8195833 C18.1125,10.4458333 17.50875,10.4458333 17.135,10.8195833 L12.4583333,15.49625 L12.4583333,4.79166667 C12.4583333,4.26458333 12.0270833,3.83333333 11.5,3.83333333 C10.9729167,3.83333333 10.5416667,4.26458333 10.5416667,4.79166667 Z" id="Path" fill="#000000" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
