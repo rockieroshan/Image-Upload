@@ -1,15 +1,17 @@
-import { FileModel } from './../../model/file-model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { CdkDragMove } from '@angular/cdk/drag-drop';
 import {
   Component,
-  OnInit,
-  ViewChild,
   ElementRef,
-  OnDestroy
+  OnDestroy,
+  OnInit,
+  ViewChild
 } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ManageImageService } from '../manage-image.service';
 import { Router } from '@angular/router';
+
+import { ManageImageService } from '../manage-image.service';
 
 @Component({
   selector: 'app-view-img',
@@ -42,20 +44,15 @@ export class ViewImgComponent implements OnInit, OnDestroy {
     this.customerName = '';
     this.customerLocation = '';
     this.manageImageService
-      .getfileObs()
+      .getSelectedfile()
       .pipe(takeUntil(this.destroyFileObj$))
       .subscribe(file => (this.selectedfileobj = file));
-
-    fromEvent(this.canvas.nativeElement, 'mousemove')
-      .pipe(takeUntil(this.destroyMouseEvent$))
-      .subscribe((evt: MouseEvent) => {
-        this.Xoffset = evt.offsetX;
-        this.Yoffset = evt.offsetY;
-      });
     if (!this.selectedfileobj) {
       this.router.navigate(['/image/add']);
     } else {
       this.onUpload(this.selectedfileobj);
+      // tslint:disable-next-line:no-string-literal
+      this.circleJson['fileName'] = this.selectedfileobj[0].name;
     }
   }
   onUpload(e: any): void {
@@ -67,13 +64,13 @@ export class ViewImgComponent implements OnInit, OnDestroy {
     render.onload = event => {
       const img = new Image();
       img.onload = () => {
-        const w = canvas.width;
-        const nw = img.naturalWidth;
-        const nh = img.naturalHeight;
-        const aspect = nw / nh;
-        const h = w / aspect;
-        canvas.height = h;
-        context.drawImage(img, 0, 0, w, h);
+        const canvasWidth = canvas.width;
+        const canvasNaturalwidth = img.naturalWidth;
+        const canvasNaturalheight = img.naturalHeight;
+        const aspect = canvasNaturalwidth / canvasNaturalheight;
+        const totalHeight = canvasWidth / aspect;
+        canvas.height = totalHeight;
+        context.drawImage(img, 0, 0, canvasWidth, totalHeight);
       };
       // tslint:disable-next-line:no-string-literal
       img.src = (event.target as FileReader).result as string;
@@ -83,21 +80,25 @@ export class ViewImgComponent implements OnInit, OnDestroy {
   createCircle(): void {
     this.count.push(1);
   }
-  showBasicDialog() {
+  showBasicDialog(): void {
     this.displayBasic = true;
   }
-  AddData() {
+  AddData(): void {
     const currentAxis = {
       xAxis: this.Xoffset,
       yAxis: this.Yoffset,
       Name: this.model.customerName,
       Location: this.model.customerLocation
     };
+    console.log('this.circleJson:', this.circleJson);
     this.circleJson.push(currentAxis);
     this.displayBasic = false;
   }
+  dragMoved(event: CdkDragMove) {
+    this.Xoffset = event.pointerPosition.x;
+    this.Yoffset = event.pointerPosition.y;
+  }
   ngOnDestroy() {
-    this.destroyMouseEvent$.unsubscribe();
     this.destroyFileObj$.unsubscribe();
   }
 }

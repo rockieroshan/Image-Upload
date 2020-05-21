@@ -1,9 +1,5 @@
 <app-header> </app-header>
 <app-loader [loading]="loading"></app-loader>
-<!-- <p-confirmDialog
-  header="Confirmation"
-  icon="pi pi-exclamation-triangle"
-></p-confirmDialog> -->
 
 <div class="container-fluid">
   <div class="row">
@@ -14,7 +10,7 @@
             type="file"
             multiple
             class="form-control"
-            (change)="fileuploads($event)"
+            (change)="fileuploads($event, true)"
             accept="image/*"
           />
           <i class="pi pi-plus">Select Images</i>
@@ -30,7 +26,6 @@
     [rows]="10"
     [responsive]="true"
     [totalRecords]="allfiles.length"
-    resetPageOnSort="false"
   >
     <ng-template pTemplate="caption">
       <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -63,7 +58,7 @@
           </span>
           <ng-template #trash>
             <span *ngIf="col.field === 'action'; else ngElse">
-              <a (click)="deleteImage(rowData)" href="javascript:void(0)"
+              <a (click)="showBasicDialog(rowData)" href="javascript:void(0)"
                 ><i class="pi pi-trash"></i>
               </a>
             </span>
@@ -85,3 +80,28 @@
   </p-table>
 </div>
 <app-footer></app-footer>
+<p-dialog
+  header="Delete"
+  [(visible)]="displayBasic"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+>
+  <div class="lg-font">Are you sure you want to remove this file ?</div>
+  <p-footer>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      (click)="removeImage()"
+      label="Remove"
+    ></button>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      (click)="displayBasic = false"
+      label="Cancel"
+      class="ui-button-secondary"
+    ></button>
+  </p-footer>
+</p-dialog>

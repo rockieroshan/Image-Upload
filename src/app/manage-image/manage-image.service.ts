@@ -1,19 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ManageImageService {
-  private currentSubject$ = new BehaviorSubject(null);
+  private passDataFromTable$ = new BehaviorSubject(null);
+  private preserveTabledata$ = new ReplaySubject(1);
 
   constructor() {}
-
-  getfileObs(): Observable<any> {
-    return this.currentSubject$.asObservable();
+  getAllfiles(): Observable<any> {
+    return this.preserveTabledata$.asObservable();
+  }
+  setAllfiles(file) {
+    this.preserveTabledata$.next(file);
   }
 
-  setileObs(profile) {
-    this.currentSubject$.next(profile);
+  getSelectedfile(): Observable<any> {
+    return this.passDataFromTable$.asObservable();
+  }
+  setSelectedfile(file) {
+    this.passDataFromTable$.next(file);
   }
 }

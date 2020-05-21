@@ -14,7 +14,7 @@ export class NotificationService {
       severity: type,
       summary: title,
       detail: message,
-      life: 5000
+      life: 1500
     };
     this.loaderSubject.next(notificationMessage as MessageState);
   }

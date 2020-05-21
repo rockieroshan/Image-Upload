@@ -1,6 +1,7 @@
-import { ConfirmationService } from 'primeng/api';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FileModel } from '../../model/file-model';
@@ -10,27 +11,33 @@ import { ManageImageService } from '../manage-image.service';
 @Component({
   selector: 'app-add-img',
   templateUrl: './add-img.component.html',
-  styleUrls: ['./add-img.component.scss'],
-  providers: [ConfirmationService]
+  styleUrls: ['./add-img.component.scss']
 })
-export class AddImgComponent implements OnInit {
+export class AddImgComponent implements OnInit, OnDestroy {
+  destroyPrevFileObj$: Subject<object> = new Subject<object>();
   images: any[] = [];
   allfiles: any[] = [];
   cols: { field: string; header: string }[];
   loading: boolean;
+  displayBasic: boolean;
+  selectedRowdata: FileModel;
+  loadPrevFile: any;
+  files: any;
+
   constructor(
     private router: Router,
     private manageImageService: ManageImageService,
-    public msg: NotificationService,
-    private confirmationService: ConfirmationService
+    public msg: NotificationService
   ) {}
 
   ngOnInit() {
-    // this.msg.addMessageToNotification(
-    //   'error',
-    //   'Error',
-    //   'Please check your user-name/password'
-    // );
+    this.manageImageService
+      .getAllfiles()
+      .pipe(takeUntil(this.destroyPrevFileObj$))
+      .subscribe(file => (this.loadPrevFile = file));
+    if (this.loadPrevFile) {
+      this.fileuploads(this.loadPrevFile, false);
+    }
     this.cols = [
       { field: 'url', header: 'Images' },
       { field: 'name', header: 'Name' },
@@ -39,50 +46,66 @@ export class AddImgComponent implements OnInit {
       { field: 'action', header: 'Action' }
     ];
   }
-  fileuploads(event) {
+
+  fileuploads(event, checkIfuplaoded) {
     this.loading = true;
-    const files = event.target.files;
-    if (files) {
+    if (checkIfuplaoded) {
+      this.files = event.target.files;
+    } else {
+      this.files = this.loadPrevFile;
+    }
+    if (this.files) {
       // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < this.files.length; i++) {
         const image = {
           name: '',
           type: '',
           size: '',
           url: ''
         };
-        this.allfiles.push(files[i]);
-        image.name = files[i].name;
-        image.type = files[i].type;
-        image.size = files[i].size;
+        this.allfiles.push(this.files[i]);
+        image.name = this.files[i].name;
+        image.type = this.files[i].type;
+        image.size = this.files[i].size;
         const reader = new FileReader();
         reader.onload = filedata => {
           image.url = reader.result + '';
           this.images.push(image);
         };
-        reader.readAsDataURL(files[i]);
+        reader.readAsDataURL(this.files[i]);
       }
     }
-    event.srcElement.value = null;
+    if (checkIfuplaoded) {
+      event.srcElement.value = null;
+    }
+    this.manageImageService.setAllfiles(this.allfiles);
     this.loading = false;
   }
-  deleteImage(image: FileModel): void {
-    this.confirmationService.confirm({
-      message: 'Are you sure that you want to delete this file?',
-      accept: () => {
-        const index = this.images.indexOf(image);
-        this.images.splice(index, 1);
-        this.allfiles.splice(index, 1);
-      }
-    });
+  showBasicDialog(image: FileModel): void {
+    this.displayBasic = true;
+    this.selectedRowdata = image;
+  }
+  removeImage(): void {
+    const index = this.images.indexOf(this.selectedRowdata);
+    this.images.splice(index, 1);
+    this.allfiles.splice(index, 1);
+    this.displayBasic = false;
+    this.msg.addMessageToNotification(
+      'success',
+      'Success',
+      'File Removed Successfully'
+    );
   }
   view(rowData: FileModel) {
     const checkSelectedfile = this.allfiles.filter(fileData => {
       return fileData.name === rowData.name && fileData.name === rowData.name;
     });
-
-    this.manageImageService.setileObs(checkSelectedfile);
+    this.manageImageService.setSelectedfile(checkSelectedfile);
     // tslint:disable-next-line:no-string-literal
     this.router.navigate(['/image/view', rowData['name']]);
+  }
+
+  ngOnDestroy() {
+    this.destroyPrevFileObj$.unsubscribe();
   }
 }

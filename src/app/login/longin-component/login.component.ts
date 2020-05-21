@@ -17,6 +17,7 @@ import { AuthgardService } from '../authgard.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  @ViewChild('loginform') loginform;
   showeye: boolean;
   switchlogintab: boolean;
   loginmodel: LoginModel;
@@ -64,6 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           'Error',
           'Please check your user-name/password'
         );
+        this.loginform.reset();
       }
     );
     this.subscriptions.push(this.unSubscribelogIn);

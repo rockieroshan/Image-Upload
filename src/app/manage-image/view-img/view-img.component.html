@@ -1,7 +1,9 @@
 <app-header> </app-header>
 <div class="container-fluid">
-  <span>X-Axis: {{ this.Xoffset }} - Y-Axis: {{ this.Yoffset }}</span>
-  <div class="row justify-content-center">
+  <span [hidden]="!Xoffset"
+    >X-Axis: {{ this.Xoffset }} - Y-Axis: {{ this.Yoffset }}</span
+  >
+  <div class="row justify-content-center mt-3">
     <div class="row">
       <div class="canvasHolder col-7 justify-content-center">
         <div
@@ -10,13 +12,14 @@
           class="redCircle"
           cdkDragBoundary=".canvasHolder"
           cdkDrag
+          (cdkDragMoved)="dragMoved($event)"
           (click)="showBasicDialog()"
         ></div>
         <canvas #canvas class="canvas mx-n3"></canvas>
       </div>
     </div>
   </div>
-  <div class="row justify-content-around mb-3">
+  <div class="row justify-content-around mb-5">
     <div class="col-7">
       <button type="button" class="btn btn-blue my-3" (click)="createCircle()">
         Add Pointer

@@ -46,19 +46,11 @@ input {
   font-size: 30px;
 }
 
-.ui-dialog-content {
-  .pi-exclamation-triangle {
-    display: none;
+.ui-dialog {
+  max-width: 30% !important;
+  .ui-dialog-content {
+    padding: 2em 1em !important;
   }
-}
-.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon {
-  display: none;
-}
-.ui-dialog-titlebar {
-  background-color: $white !important;
-}
-.ui-dialog .ui-dialog-content {
-  border: none !important;
 }
 .ui-table .ui-sortable-column.ui-state-highlight {
   background-color: #f4f4f4 !important;
