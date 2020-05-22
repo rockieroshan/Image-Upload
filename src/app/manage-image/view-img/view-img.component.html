@@ -1,19 +1,18 @@
 <app-header> </app-header>
 <div class="container-fluid">
-  <span [hidden]="!Xoffset"
-    >X-Axis: {{ this.Xoffset }} - Y-Axis: {{ this.Yoffset }}</span
+  <span [hidden]="!isCircleCreated" class="xl-font"
+    >X-Axis: {{ this.Xposition }} Y-Axis: {{ this.Yposition }}</span
   >
   <div class="row justify-content-center mt-3">
     <div class="row">
       <div class="canvasHolder col-7 justify-content-center">
         <div
-          #redCircle
           *ngFor="let circles of count"
           class="redCircle"
           cdkDragBoundary=".canvasHolder"
           cdkDrag
-          (cdkDragMoved)="dragMoved($event)"
-          (click)="showBasicDialog()"
+          (cdkDragEnded)="dragEnd($event)"
+          (click)="displayBasic = true"
         ></div>
         <canvas #canvas class="canvas mx-n3"></canvas>
       </div>
@@ -36,7 +35,7 @@
 >
   <form name="form" #imgForm="ngForm" novalidate>
     <div class="form-group">
-      <label for="customerName">Customer Name</label>
+      <label for="customerName">Name</label>
       <input
         type="text"
         class="form-control"
@@ -47,7 +46,7 @@
       />
     </div>
     <div class="form-group">
-      <label for="customerLocation">Customer Location</label>
+      <label for="customerLocation">Location</label>
       <input
         type="text"
         class="form-control"

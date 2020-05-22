@@ -1,7 +1,7 @@
-import { Subject } from 'rxjs';
+import { Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { CdkDragMove } from '@angular/cdk/drag-drop';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import {
   Component,
   ElementRef,
@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 
 import { ManageImageService } from '../manage-image.service';
+import { NotificationService } from 'src/app/shared/notification/notification.service';
 
 @Component({
   selector: 'app-view-img',
@@ -20,29 +21,37 @@ import { ManageImageService } from '../manage-image.service';
 })
 export class ViewImgComponent implements OnInit, OnDestroy {
   @ViewChild('canvas') canvas: ElementRef;
-  @ViewChild('redCircle') redCircle: ElementRef;
-  destroyMouseEvent$: Subject<boolean> = new Subject<boolean>();
   destroyFileObj$: Subject<object> = new Subject<object>();
+  initialPosition = { x: 738, y: 52 };
+  position = { ...this.initialPosition };
+  offset = { x: 0, y: 0 };
   model: any = {};
   context: CanvasRenderingContext2D;
   displayBasic: boolean;
   customerName: string;
   customerLocation: string;
   uploadedFiles: any[] = [];
-  Xoffset: number;
-  Yoffset: number;
+  Xposition: number;
+  Yposition: number;
   circleJson: any[] = [];
   count: any[] = [];
-  selectedfileobj: any;
+  selectedfileobj: File;
+  isCircleCreated: boolean;
+  loading: boolean;
 
   constructor(
     private manageImageService: ManageImageService,
-    private router: Router
+    private router: Router,
+    public msg: NotificationService
   ) {}
   ngOnInit() {
+    this.loading = true;
     this.count = [];
     this.customerName = '';
     this.customerLocation = '';
+    this.isCircleCreated = false;
+    this.Xposition = this.initialPosition.x;
+    this.Yposition = this.initialPosition.y;
     this.manageImageService
       .getSelectedfile()
       .pipe(takeUntil(this.destroyFileObj$))
@@ -55,7 +64,7 @@ export class ViewImgComponent implements OnInit, OnDestroy {
       this.circleJson['fileName'] = this.selectedfileobj[0].name;
     }
   }
-  onUpload(e: any): void {
+  onUpload(e: File): void {
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
     canvas.width = 800;
@@ -64,39 +73,55 @@ export class ViewImgComponent implements OnInit, OnDestroy {
     render.onload = event => {
       const img = new Image();
       img.onload = () => {
-        const canvasWidth = canvas.width;
-        const canvasNaturalwidth = img.naturalWidth;
-        const canvasNaturalheight = img.naturalHeight;
-        const aspect = canvasNaturalwidth / canvasNaturalheight;
-        const totalHeight = canvasWidth / aspect;
-        canvas.height = totalHeight;
-        context.drawImage(img, 0, 0, canvasWidth, totalHeight);
+        enum CanvasStructure {
+          canvasWidth = canvas.width,
+          canvasNaturalwidth = img.naturalWidth,
+          canvasNaturalheight = img.naturalHeight,
+          aspect = canvasNaturalwidth / canvasNaturalheight,
+          totalHeight = canvasWidth / aspect
+        }
+        canvas.height = CanvasStructure.totalHeight;
+        context.drawImage(
+          img,
+          0,
+          0,
+          CanvasStructure.canvasWidth,
+          CanvasStructure.totalHeight
+        );
       };
       // tslint:disable-next-line:no-string-literal
       img.src = (event.target as FileReader).result as string;
     };
     render.readAsDataURL(e[0]);
+    this.loading = false;
   }
   createCircle(): void {
     this.count.push(1);
-  }
-  showBasicDialog(): void {
-    this.displayBasic = true;
+    this.Xposition = this.initialPosition.x;
+    this.Yposition = this.initialPosition.y;
+    this.isCircleCreated = true;
+    this.msg.addMessageToNotification(
+      'success',
+      'Success',
+      'Circle created Successfully'
+    );
   }
   AddData(): void {
     const currentAxis = {
-      xAxis: this.Xoffset,
-      yAxis: this.Yoffset,
+      xAxis: this.Xposition,
+      yAxis: this.Yposition,
       Name: this.model.customerName,
       Location: this.model.customerLocation
     };
-    console.log('this.circleJson:', this.circleJson);
     this.circleJson.push(currentAxis);
     this.displayBasic = false;
+    console.log('this.circleJson:', this.circleJson);
   }
-  dragMoved(event: CdkDragMove) {
-    this.Xoffset = event.pointerPosition.x;
-    this.Yoffset = event.pointerPosition.y;
+
+  dragEnd(event: CdkDragEnd) {
+    this.offset = { ...(event.source._dragRef as any)._passiveTransform };
+    this.Xposition = this.initialPosition.x + this.offset.x;
+    this.Yposition = this.initialPosition.y + this.offset.y;
   }
   ngOnDestroy() {
     this.destroyFileObj$.unsubscribe();

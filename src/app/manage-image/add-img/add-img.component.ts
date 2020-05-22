@@ -21,7 +21,7 @@ export class AddImgComponent implements OnInit, OnDestroy {
   loading: boolean;
   displayBasic: boolean;
   selectedRowdata: FileModel;
-  loadPrevFile: any;
+  loadPrevFile: File;
   files: any;
 
   constructor(
@@ -49,11 +49,9 @@ export class AddImgComponent implements OnInit, OnDestroy {
 
   fileuploads(event, checkIfuplaoded) {
     this.loading = true;
-    if (checkIfuplaoded) {
-      this.files = event.target.files;
-    } else {
-      this.files = this.loadPrevFile;
-    }
+    checkIfuplaoded
+      ? (this.files = event.target.files)
+      : (this.files = this.loadPrevFile);
     if (this.files) {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < this.files.length; i++) {
@@ -64,9 +62,10 @@ export class AddImgComponent implements OnInit, OnDestroy {
           url: ''
         };
         this.allfiles.push(this.files[i]);
+        const formatSize = this.files[i].size / 1000;
         image.name = this.files[i].name;
         image.type = this.files[i].type;
-        image.size = this.files[i].size;
+        image.size = `${formatSize}kb`;
         const reader = new FileReader();
         reader.onload = filedata => {
           image.url = reader.result + '';
@@ -77,6 +76,11 @@ export class AddImgComponent implements OnInit, OnDestroy {
     }
     if (checkIfuplaoded) {
       event.srcElement.value = null;
+      this.msg.addMessageToNotification(
+        'success',
+        'Success',
+        'File(s) Added Successfully'
+      );
     }
     this.manageImageService.setAllfiles(this.allfiles);
     this.loading = false;
