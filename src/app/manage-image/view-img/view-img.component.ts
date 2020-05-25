@@ -7,7 +7,8 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  AfterViewInit
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -19,7 +20,7 @@ import { NotificationService } from 'src/app/shared/notification/notification.se
   templateUrl: './view-img.component.html',
   styleUrls: ['./view-img.component.scss']
 })
-export class ViewImgComponent implements OnInit, OnDestroy {
+export class ViewImgComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('canvas') canvas: ElementRef;
   destroyFileObj$: Subject<object> = new Subject<object>();
   initialPosition = { x: 738, y: 52 };
@@ -56,6 +57,8 @@ export class ViewImgComponent implements OnInit, OnDestroy {
       .getSelectedfile()
       .pipe(takeUntil(this.destroyFileObj$))
       .subscribe(file => (this.selectedfileobj = file));
+  }
+  ngAfterViewInit() {
     if (!this.selectedfileobj) {
       this.router.navigate(['/image/add']);
     } else {
