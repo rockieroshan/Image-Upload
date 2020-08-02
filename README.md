@@ -6,8 +6,3 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `npm run dev` for a dev server on AOT. Navigate to `http://localhost:8080/`. The app will automatically reload if you change any of the source files. 
 
-## Login
-Used https://reqres.in/api/login 
-
-Use email: "eve.holt@reqres.in" password: "cityslicka" to login.
-
